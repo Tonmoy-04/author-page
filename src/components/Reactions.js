@@ -1,31 +1,31 @@
-import React, { useState } from "react";
-import { FaThumbsUp, FaHeart, FaLaugh } from "react-icons/fa";
-import "../App.css";
+import React from "react";
 
-const Reactions = () => {
-  const [selected, setSelected] = useState(null);
-
-  const icons = [
-    { id: "like", icon: <FaThumbsUp /> },
-    { id: "love", icon: <FaHeart /> },
-    { id: "funny", icon: <FaLaugh /> },
+const ReactionBar = ({ reaction, onReact }) => {
+  const reactions = [
+    { type: "like", label: "👍", color: "blue" },
+    { type: "love", label: "❤️", color: "red" },
+    { type: "wow", label: "😮", color: "goldenrod" },
   ];
 
   return (
     <div className="reactions">
-      {icons.map((item) => (
-        <button
-          key={item.id}
-          onClick={() => setSelected(item.id)}
-          className={`reaction-btn ${
-            selected === item.id ? "active-reaction" : ""
-          }`}
+      {reactions.map((r) => (
+        <span
+          key={r.type}
+          style={{
+            color: reaction === r.type ? r.color : "gray", // highlight only the selected
+            cursor: "pointer",
+            marginRight: "10px",
+            fontSize: "20px",
+            transition: "all 0.3s ease",
+          }}
+          onClick={() => onReact(r.type)} // pass type back to App.js
         >
-          {item.icon}
-        </button>
+          {r.label}
+        </span>
       ))}
     </div>
   );
 };
 
-export default Reactions;
+export default ReactionBar;

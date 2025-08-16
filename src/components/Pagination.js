@@ -1,18 +1,17 @@
 import React from "react";
-import "../App.css";
 
-const Pagination = ({ currentPage, setCurrentPage, totalPages }) => {
+const Pagination = ({ currentPage, totalPages, onPageChange }) => {
   const pages = Array.from({ length: totalPages }, (_, i) => i + 1);
 
   return (
     <div className="pagination">
-      {pages.map((page) => (
+      {pages.map((p) => (
         <button
-          key={page}
-          onClick={() => setCurrentPage(page)}
-          className={`page-btn ${currentPage === page ? "active-page" : ""}`}
+          key={p}
+          onClick={() => onPageChange(p)}
+          className={p === currentPage ? "active-page" : ""}
         >
-          {page}
+          {p}
         </button>
       ))}
     </div>
