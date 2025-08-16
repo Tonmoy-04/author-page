@@ -1,153 +1,169 @@
-import React, { useState } from "react";
-import "./App.css";
-import profilePic from "./Assets/author.jpg";
-import janePic from "./Assets/user2.jpg";
-import johnPic from "./Assets/user1.jpg";
-import alicePic from "./Assets/user3.jpg";
-
-import ReactionBar from "./components/Reactions";
-import CommentSection from "./components/CommentSection";
-import Pagination from "./components/Pagination";
+import React, { useState } from 'react';
+import './App.css';
+import authorImage from './Assets/author.jpg';
+import Reactions from './components/Reactions';
+import CommentSection from './components/CommentSection';
+import Pagination from './components/Pagination';
 
 function App() {
-  const currentUser = {
-    name: "Noman Ahmed Tonmoy",
-    photo: profilePic,
-    designation: "Software Engineer",
-  };
-
-  const dummyPosts = [
+  const [articles, setArticles] = useState([
     {
       id: 1,
-      content: "Just finished my React project!",
-      reaction: null,
-      comments: [
-        { id: 1, text: "Awesome work!", user: { name: "User 1", photo: janePic }, replies: [] },
-        { id: 2, text: "Keep it up!", user: { name: "User 2", photo: johnPic }, replies: [] },
-      ],
+      title: "Getting Started with React Hooks",
+      content: "React Hooks revolutionized how we write components. They allow you to use state and other React features without writing classes.",
+      date: "May 15, 2023",
+      likes: 42,
+      comments: 8,
+      shares: 12
     },
     {
       id: 2,
-      content: "Learning new features in JavaScript.",
-      reaction: null,
-      comments: [
-        { id: 3, text: "Very helpful!", user: { name: "User 3", photo: alicePic }, replies: [] },
-      ],
+      title: "The Power of Context API",
+      content: "Context provides a way to pass data through the component tree without having to pass props down manually at every level.",
+      date: "June 2, 2023",
+      likes: 35,
+      comments: 5,
+      shares: 7
     },
     {
       id: 3,
-      content: "Designing a modern author page using React.",
-      reaction: null,
-      comments: [],
-    },
-    {
-      id: 4,
-      content: "Excited to share my coding journey.",
-      reaction: null,
-      comments: [],
-    },
-  ];
-
-  const [posts, setPosts] = useState(dummyPosts);
-  const [newPost, setNewPost] = useState("");
+      title: "Optimizing React Performance",
+      content: "Learn techniques like memoization, code splitting, and virtualization to make your React apps blazing fast.",
+      date: "June 20, 2023",
+      likes: 58,
+      comments: 12,
+      shares: 18
+    }
+  ]);
+  
+  const [newArticle, setNewArticle] = useState({
+    title: '',
+    content: ''
+  });
+  
   const [currentPage, setCurrentPage] = useState(1);
-  const postsPerPage = 2;
+  const articlesPerPage = 2;
 
-  const addPost = () => {
-    if (!newPost.trim()) return;
-    setPosts([
-      { id: Date.now(), content: newPost, reaction: null, comments: [] },
-      ...posts,
-    ]);
-    setNewPost("");
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setNewArticle(prev => ({
+      ...prev,
+      [name]: value
+    }));
   };
 
-  const handleReact = (postId, type) => {
-    setPosts(
-      posts.map((p) =>
-        p.id === postId
-          ? { ...p, reaction: p.reaction === type ? null : type } // toggle reaction
-          : p
-      )
-    );
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (newArticle.title.trim() && newArticle.content.trim()) {
+      const article = {
+        id: articles.length + 1,
+        title: newArticle.title,
+        content: newArticle.content,
+        date: new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }),
+        likes: 0,
+        comments: 0,
+        shares: 0
+      };
+      setArticles([article, ...articles]);
+      setNewArticle({ title: '', content: '' });
+    }
   };
 
-  const handleAddComment = (postId, text) => {
-    setPosts(
-      posts.map((p) =>
-        p.id === postId
-          ? { ...p, comments: [...p.comments, { id: Date.now(), text, user: currentUser, replies: [] }] }
-          : p
-      )
-    );
-  };
-
-  const handleReply = (postId, commentId, text) => {
-    setPosts(
-      posts.map((p) =>
-        p.id === postId
-          ? {
-              ...p,
-              comments: p.comments.map((c) =>
-                c.id === commentId
-                  ? { ...c, replies: [...c.replies, { id: Date.now(), text, user: currentUser }] }
-                  : c
-              ),
-            }
-          : p
-      )
-    );
+  const updateReactions = (id, type) => {
+    setArticles(articles.map(article => {
+      if (article.id === id) {
+        return { ...article, [type]: article[type] + 1 };
+      }
+      return article;
+    }));
   };
 
   // Pagination logic
-  const totalPages = Math.ceil(posts.length / postsPerPage);
-  const indexOfLast = currentPage * postsPerPage;
-  const indexOfFirst = indexOfLast - postsPerPage;
-  const currentPosts = posts.slice(indexOfFirst, indexOfLast);
+  const indexOfLastArticle = currentPage * articlesPerPage;
+  const indexOfFirstArticle = indexOfLastArticle - articlesPerPage;
+  const currentArticles = articles.slice(indexOfFirstArticle, indexOfLastArticle);
+  const totalPages = Math.ceil(articles.length / articlesPerPage);
 
   return (
-    <div className="app-container">
-      {/* Profile Header */}
+    <div className="app">
       <div className="profile-header">
-        <img src={currentUser.photo} alt="profile" className="profile-photo" />
-        <div>
-          <h2>{currentUser.name}</h2>
-          <p>{currentUser.designation}</p>
-          <div className="profile-stats">
-            <span>Followers: 120</span>
-            <span>Following: 80</span>
-            <span>Articles: {posts.length}</span>
+        <div className="profile-banner"></div>
+        <div className="profile-info">
+          <img src={authorImage} alt="Author" className="profile-pic" />
+          <div className="profile-details">
+            <h1>Alex Johnson</h1>
+            <p>@reactdev</p>
+            <p>Frontend Developer | React Enthusiast | Sharing my coding journey</p>
+            <div className="profile-stats">
+              <div>
+                <strong>{articles.length}</strong>
+                <span>Articles</span>
+              </div>
+              <div>
+                <strong>1.2k</strong>
+                <span>Followers</span>
+              </div>
+              <div>
+                <strong>356</strong>
+                <span>Following</span>
+              </div>
+            </div>
           </div>
         </div>
       </div>
 
-      {/* New Post */}
-      <div className="new-post">
-        <textarea
-          placeholder="Write your article..."
-          value={newPost}
-          onChange={(e) => setNewPost(e.target.value)}
-        />
-        <button onClick={addPost}>Post</button>
-      </div>
-
-      {/* Posts Feed */}
-      {currentPosts.map((post) => (
-        <div key={post.id} className="post">
-          <p>{post.content}</p>
-          <ReactionBar reaction={post.reaction} onReact={(type) => handleReact(post.id, type)} />
-          <CommentSection
-            comments={post.comments}
-            currentUser={currentUser}
-            onAddComment={handleAddComment}
-            onReply={handleReply}
-            postId={post.id}
-          />
+      <div className="content-container">
+        <div className="article-form">
+          <h3>Write a new article</h3>
+          <form onSubmit={handleSubmit}>
+            <input
+              type="text"
+              name="title"
+              placeholder="Article title"
+              value={newArticle.title}
+              onChange={handleInputChange}
+              required
+            />
+            <textarea
+              name="content"
+              placeholder="What's on your mind?"
+              value={newArticle.content}
+              onChange={handleInputChange}
+              required
+            ></textarea>
+            <button type="submit">Publish</button>
+          </form>
         </div>
-      ))}
 
-      {/* Pagination */}
-      <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={setCurrentPage} />
+        <div className="articles-list">
+          {currentArticles.map(article => (
+            <div key={article.id} className="article-card">
+              <div className="article-header">
+                <img src={authorImage} alt="Author" className="article-author-pic" />
+                <div>
+                  <h4>Alex Johnson</h4>
+                  <p className="article-date">@{article.date}</p>
+                </div>
+              </div>
+              <h3>{article.title}</h3>
+              <p>{article.content}</p>
+              <Reactions 
+                likes={article.likes}
+                comments={article.comments}
+                shares={article.shares}
+                onReaction={(type) => updateReactions(article.id, type)}
+              />
+              <CommentSection articleId={article.id} />
+            </div>
+          ))}
+        </div>
+
+        <Pagination 
+          currentPage={currentPage}
+          totalPages={totalPages}
+          onPageChange={setCurrentPage}
+        />
+      </div>
     </div>
   );
 }

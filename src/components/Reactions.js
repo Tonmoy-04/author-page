@@ -1,31 +1,20 @@
-import React from "react";
+import React from 'react';
+import './Reactions.css';
 
-const ReactionBar = ({ reaction, onReact }) => {
-  const reactions = [
-    { type: "like", label: "👍", color: "blue" },
-    { type: "love", label: "❤️", color: "red" },
-    { type: "wow", label: "😮", color: "goldenrod" },
-  ];
-
+function Reactions({ likes, comments, shares, onReaction }) {
   return (
     <div className="reactions">
-      {reactions.map((r) => (
-        <span
-          key={r.type}
-          style={{
-            color: reaction === r.type ? r.color : "gray", // highlight only the selected
-            cursor: "pointer",
-            marginRight: "10px",
-            fontSize: "20px",
-            transition: "all 0.3s ease",
-          }}
-          onClick={() => onReact(r.type)} // pass type back to App.js
-        >
-          {r.label}
-        </span>
-      ))}
+      <button onClick={() => onReaction('likes')}>
+        <span role="img" aria-label="Like">👍</span> {likes}
+      </button>
+      <button onClick={() => onReaction('comments')}>
+        <span role="img" aria-label="Comment">💬</span> {comments}
+      </button>
+      <button onClick={() => onReaction('shares')}>
+        <span role="img" aria-label="Share">🔗</span> {shares}
+      </button>
     </div>
   );
-};
+}
 
-export default ReactionBar;
+export default Reactions;
