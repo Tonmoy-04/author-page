@@ -6,6 +6,16 @@ import CommentSection from './components/CommentSection';
 import Pagination from './components/Pagination';
 
 function App() {
+  // Author data
+  const author = {
+    name: "Noman Ahmed Tonmoy",
+    handle: "@reactdev",
+    bio: "Frontend Developer | React Enthusiast | Sharing my coding journey",
+    followers: 1200,
+    following: 356
+  };
+
+  // Articles state
   const [articles, setArticles] = useState([
     {
       id: 1,
@@ -36,14 +46,23 @@ function App() {
     }
   ]);
   
+  // New article form state
   const [newArticle, setNewArticle] = useState({
     title: '',
     content: ''
   });
   
+  // Pagination state
   const [currentPage, setCurrentPage] = useState(1);
   const articlesPerPage = 2;
 
+  // Calculate current articles for pagination
+  const indexOfLastArticle = currentPage * articlesPerPage;
+  const indexOfFirstArticle = indexOfLastArticle - articlesPerPage;
+  const currentArticles = articles.slice(indexOfFirstArticle, indexOfLastArticle);
+  const totalPages = Math.ceil(articles.length / articlesPerPage);
+
+  // Handle form input changes
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setNewArticle(prev => ({
@@ -52,6 +71,7 @@ function App() {
     }));
   };
 
+  // Handle article submission
   const handleSubmit = (e) => {
     e.preventDefault();
     if (newArticle.title.trim() && newArticle.content.trim()) {
@@ -66,9 +86,11 @@ function App() {
       };
       setArticles([article, ...articles]);
       setNewArticle({ title: '', content: '' });
+      setCurrentPage(1); // Reset to first page when adding new article
     }
   };
 
+  // Update reactions
   const updateReactions = (id, type) => {
     setArticles(articles.map(article => {
       if (article.id === id) {
@@ -78,12 +100,6 @@ function App() {
     }));
   };
 
-  // Pagination logic
-  const indexOfLastArticle = currentPage * articlesPerPage;
-  const indexOfFirstArticle = indexOfLastArticle - articlesPerPage;
-  const currentArticles = articles.slice(indexOfFirstArticle, indexOfLastArticle);
-  const totalPages = Math.ceil(articles.length / articlesPerPage);
-
   return (
     <div className="app">
       <div className="profile-header">
@@ -91,20 +107,20 @@ function App() {
         <div className="profile-info">
           <img src={authorImage} alt="Author" className="profile-pic" />
           <div className="profile-details">
-            <h1>Alex Johnson</h1>
-            <p>@reactdev</p>
-            <p>Frontend Developer | React Enthusiast | Sharing my coding journey</p>
+            <h1>{author.name}</h1>
+            <p>{author.handle}</p>
+            <p>{author.bio}</p>
             <div className="profile-stats">
               <div>
                 <strong>{articles.length}</strong>
                 <span>Articles</span>
               </div>
               <div>
-                <strong>1.2k</strong>
+                <strong>{author.followers.toLocaleString()}</strong>
                 <span>Followers</span>
               </div>
               <div>
-                <strong>356</strong>
+                <strong>{author.following}</strong>
                 <span>Following</span>
               </div>
             </div>
@@ -141,8 +157,8 @@ function App() {
               <div className="article-header">
                 <img src={authorImage} alt="Author" className="article-author-pic" />
                 <div>
-                  <h4>Alex Johnson</h4>
-                  <p className="article-date">@{article.date}</p>
+                  <h4>{author.name}</h4>
+                  <p className="article-date">{author.handle} · {article.date}</p>
                 </div>
               </div>
               <h3>{article.title}</h3>
@@ -153,7 +169,11 @@ function App() {
                 shares={article.shares}
                 onReaction={(type) => updateReactions(article.id, type)}
               />
-              <CommentSection articleId={article.id} />
+              <CommentSection 
+                articleId={article.id} 
+                authorName={author.name}
+                currentUser="Current User" // Would normally come from auth
+              />
             </div>
           ))}
         </div>
