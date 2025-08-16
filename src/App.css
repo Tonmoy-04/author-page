@@ -1,38 +1,135 @@
-.App {
-  text-align: center;
+/* General Layout */
+body {
+  font-family: Arial, sans-serif;
+  background: #f7f7f7;
+  margin: 0;
+  padding: 0;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.container {
+  max-width: 700px;
+  margin: 30px auto;
+  padding: 20px;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 3px 6px rgba(0,0,0,0.1);
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+/* Article */
+.article-title {
+  font-size: 28px;
+  font-weight: bold;
+  margin-bottom: 15px;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+.article-body {
+  font-size: 16px;
+  color: #444;
+  margin-bottom: 20px;
+}
+
+.author-line {
+  margin: 10px 0 20px 0;
+}
+
+.author-link {
+  color: #0077cc;
+  text-decoration: none;
+  font-weight: bold;
+}
+.author-link:hover {
+  text-decoration: underline;
+}
+
+.section-title {
+  font-size: 20px;
+  margin: 20px 0 10px 0;
+}
+
+/* Reactions */
+.reactions {
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
+  gap: 10px;
+  margin: 10px 0;
+}
+
+.reaction-btn {
+  border: none;
+  padding: 8px 12px;
+  font-size: 20px;
+  background: #e0e0e0;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: 0.2s;
+}
+.reaction-btn:hover {
+  background: #d0d0d0;
+}
+.active-reaction {
+  background: #0077cc;
   color: white;
 }
 
-.App-link {
-  color: #61dafb;
+/* Comments */
+.comment-list {
+  list-style: none;
+  padding: 0;
+}
+.comment-item {
+  background: #f1f1f1;
+  padding: 12px;
+  border-radius: 6px;
+  margin-bottom: 12px;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+/* Pagination */
+.pagination {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 20px;
+}
+.page-btn {
+  border: none;
+  background: #e0e0e0;
+  padding: 6px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+.page-btn:hover {
+  background: #d0d0d0;
+}
+.active-page {
+  background: #0077cc;
+  color: white;
+}
+
+/* Author Page */
+.author-container {
+  max-width: 500px;
+  margin: 40px auto;
+  text-align: center;
+  padding: 20px;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 3px 6px rgba(0,0,0,0.1);
+}
+.author-img {
+  border-radius: 50%;
+  margin-bottom: 15px;
+}
+.author-name {
+  font-size: 24px;
+  font-weight: bold;
+}
+.author-desc {
+  color: #555;
+  margin-bottom: 20px;
+}
+.back-link {
+  color: #0077cc;
+  text-decoration: none;
+}
+.back-link:hover {
+  text-decoration: underline;
 }
