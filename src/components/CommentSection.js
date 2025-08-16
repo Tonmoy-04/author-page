@@ -6,7 +6,7 @@ function CommentSection({ articleId, authorName, currentUser }) {
     {
       id: 1,
       text: "Great article! Really helped me understand hooks better.",
-      author: "Jane Doe",
+      author: "Jonayed Mahi",
       date: "2 hours ago",
       replies: [
         {

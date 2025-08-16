@@ -17,15 +17,15 @@ function App() {
 
   // Articles state
   const [articles, setArticles] = useState([
-    {
-      id: 1,
-      title: "Getting Started with React Hooks",
-      content: "React Hooks revolutionized how we write components. They allow you to use state and other React features without writing classes.",
-      date: "May 15, 2023",
-      likes: 42,
-      comments: 8,
-      shares: 12
-    },
+     {
+    id: 1,
+    title: "Getting Started with React Hooks",
+    content: "React Hooks revolutionized how we write components...",
+    date: "May 15, 2023",
+    likes: 42,
+    comments: 0, // Initialize at 0
+    shares: 12
+  },
     {
       id: 2,
       title: "The Power of Context API",
@@ -172,7 +172,7 @@ function App() {
               <CommentSection 
                 articleId={article.id} 
                 authorName={author.name}
-                currentUser="Current User" // Would normally come from auth
+                currentUser="New User" // Would normally come from auth
               />
             </div>
           ))}
