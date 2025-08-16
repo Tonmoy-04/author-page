@@ -7,9 +7,9 @@ function Reactions({ likes, comments, shares, onReaction }) {
       <button onClick={() => onReaction('likes')}>
         <span role="img" aria-label="Like">👍</span> {likes}
       </button>
-      <button onClick={() => onReaction('comments')}>
+      <div className="comment-count">
         <span role="img" aria-label="Comment">💬</span> {comments}
-      </button>
+      </div>
       <button onClick={() => onReaction('shares')}>
         <span role="img" aria-label="Share">🔗</span> {shares}
       </button>

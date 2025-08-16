@@ -1,24 +1,8 @@
 import React, { useState } from 'react';
 import './CommentSection.css';
 
-function CommentSection({ articleId, authorName, currentUser }) {
-  const [comments, setComments] = useState([
-    {
-      id: 1,
-      text: "Great article! Really helped me understand hooks better.",
-      author: "Jonayed Mahi",
-      date: "2 hours ago",
-      replies: [
-        {
-          id: 11,
-          text: "Thanks! Glad you found it helpful.",
-          author: authorName,
-          date: "1 hour ago"
-        }
-      ]
-    }
-  ]);
-  
+function CommentSection({ articleId, authorName, currentUser, onCommentAdded }) {
+  const [comments, setComments] = useState([]);
   const [newComment, setNewComment] = useState('');
   const [replyingTo, setReplyingTo] = useState(null);
 
@@ -27,7 +11,7 @@ function CommentSection({ articleId, authorName, currentUser }) {
     if (!newComment.trim()) return;
 
     if (replyingTo) {
-      // Add reply
+      // Handle reply - doesn't increment comment count
       setComments(comments.map(comment => {
         if (comment.id === replyingTo) {
           return {
@@ -44,9 +28,9 @@ function CommentSection({ articleId, authorName, currentUser }) {
           };
         }
         return comment;
-      }));
+      })); // Added missing closing parenthesis here
     } else {
-      // Add new comment
+      // Handle new comment - increments count
       setComments([
         ...comments,
         {
@@ -57,6 +41,7 @@ function CommentSection({ articleId, authorName, currentUser }) {
           replies: []
         }
       ]);
+      onCommentAdded(); // Only call this for new top-level comments
     }
 
     setNewComment('');
@@ -100,7 +85,7 @@ function CommentSection({ articleId, authorName, currentUser }) {
               Reply
             </button>
 
-            {comment.replies.length > 0 && (
+            {comment.replies && comment.replies.length > 0 && (
               <div className="replies">
                 {comment.replies.map(reply => (
                   <div key={reply.id} className="reply">

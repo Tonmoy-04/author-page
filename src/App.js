@@ -6,33 +6,31 @@ import CommentSection from './components/CommentSection';
 import Pagination from './components/Pagination';
 
 function App() {
-  // Author data
   const author = {
     name: "Noman Ahmed Tonmoy",
-    handle: "@reactdev",
+    handle: "@noman51",
     bio: "Frontend Developer | React Enthusiast | Sharing my coding journey",
     followers: 1200,
     following: 356
   };
 
-  // Articles state
   const [articles, setArticles] = useState([
-     {
-    id: 1,
-    title: "Getting Started with React Hooks",
-    content: "React Hooks revolutionized how we write components...",
-    date: "May 15, 2023",
-    likes: 42,
-    comments: 0, // Initialize at 0
-    shares: 12
-  },
+    {
+      id: 1,
+      title: "Getting Started with React Hooks",
+      content: "React Hooks revolutionized how we write components. They allow you to use state and other React features without writing classes.",
+      date: "May 15, 2023",
+      likes: 42,
+      comments: 0, // Initialize comments at 0
+      shares: 12
+    },
     {
       id: 2,
       title: "The Power of Context API",
       content: "Context provides a way to pass data through the component tree without having to pass props down manually at every level.",
       date: "June 2, 2023",
       likes: 35,
-      comments: 5,
+      comments: 0, // Initialize comments at 0
       shares: 7
     },
     {
@@ -41,28 +39,24 @@ function App() {
       content: "Learn techniques like memoization, code splitting, and virtualization to make your React apps blazing fast.",
       date: "June 20, 2023",
       likes: 58,
-      comments: 12,
+      comments: 0, // Initialize comments at 0
       shares: 18
     }
   ]);
   
-  // New article form state
   const [newArticle, setNewArticle] = useState({
     title: '',
     content: ''
   });
   
-  // Pagination state
   const [currentPage, setCurrentPage] = useState(1);
   const articlesPerPage = 2;
 
-  // Calculate current articles for pagination
   const indexOfLastArticle = currentPage * articlesPerPage;
   const indexOfFirstArticle = indexOfLastArticle - articlesPerPage;
   const currentArticles = articles.slice(indexOfFirstArticle, indexOfLastArticle);
   const totalPages = Math.ceil(articles.length / articlesPerPage);
 
-  // Handle form input changes
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setNewArticle(prev => ({
@@ -71,7 +65,6 @@ function App() {
     }));
   };
 
-  // Handle article submission
   const handleSubmit = (e) => {
     e.preventDefault();
     if (newArticle.title.trim() && newArticle.content.trim()) {
@@ -86,15 +79,22 @@ function App() {
       };
       setArticles([article, ...articles]);
       setNewArticle({ title: '', content: '' });
-      setCurrentPage(1); // Reset to first page when adding new article
     }
   };
 
-  // Update reactions
   const updateReactions = (id, type) => {
     setArticles(articles.map(article => {
       if (article.id === id) {
         return { ...article, [type]: article[type] + 1 };
+      }
+      return article;
+    }));
+  };
+
+  const incrementCommentCount = (articleId) => {
+    setArticles(articles.map(article => {
+      if (article.id === articleId) {
+        return { ...article, comments: article.comments + 1 };
       }
       return article;
     }));
@@ -172,7 +172,8 @@ function App() {
               <CommentSection 
                 articleId={article.id} 
                 authorName={author.name}
-                currentUser="New User" // Would normally come from auth
+                currentUser="AUSTian"
+                onCommentAdded={() => incrementCommentCount(article.id)}
               />
             </div>
           ))}

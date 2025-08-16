@@ -2,6 +2,7 @@
   display: flex;
   gap: 15px;
   margin: 15px 0;
+  align-items: center;
 }
 
 .reactions button {
@@ -19,4 +20,13 @@
 
 .reactions button:hover {
   background-color: var(--hover-color);
+}
+
+.comment-count {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  color: var(--secondary-text);
+  font-size: 14px;
+  padding: 5px 10px;
 }
